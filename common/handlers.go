@@ -5,6 +5,7 @@ import (
 	"119_gsmysql/helpers"
 	"119_gsmysql/userdata"
 	"bytes"
+	"crypto/rand"
 	"fmt"
 	"html/template"
 	"log"
@@ -14,6 +15,24 @@ import (
 
 	"github.com/google/uuid"
 )
+
+// Ajouté le 02/02/2024
+// Note - NOT RFC4122 compliant
+func pseudo_uuid() (uuid string) {
+
+	b := make([]byte, 16)
+	_, err := rand.Read(b)
+	if err != nil {
+		fmt.Println("Error: ", err)
+		return
+	}
+
+	uuid = fmt.Sprintf("%X-%X-%X-%X-%X", b[0:4], b[4:6], b[6:8], b[8:10], b[10:])
+
+	return
+}
+
+// Fin de l'Ajout du 02/02/2024
 
 // Ajouté le 27/01/2024 13h42
 func renderTemplate(w http.ResponseWriter, tmplName string, td any) {
@@ -79,7 +98,11 @@ func SessionValide(w http.ResponseWriter, r *http.Request) (stoken string, resul
 		return stoken, resultat
 	}
 	// If the previous session is valid, create a new session token for the current user
-	newSessionToken := uuid.NewString()
+	// on peut utiliser google : "github.com/google/uuid"
+	// ou bien pseudo_uuid() fonction ci dessus qui utilise "crypto/rand"
+
+	/* newSessionToken := uuid.NewString() */
+	newSessionToken := pseudo_uuid()
 	maxAge := 120
 
 	// Set the token in the session map, along with the user whom it represents
@@ -171,8 +194,10 @@ func Signin(w http.ResponseWriter, r *http.Request) {
 	// Database checked for user data!
 	if userdata.UserIsValid(creds) {
 		// Créer un nouveau jeton de session aléatoire
-		sessionToken := uuid.NewString()
-		//expiresAt := time.Now().Add(300 * time.Second)
+		// on peut utiliser google : "github.com/google/uuid"
+		// ou bien pseudo_uuid() fonction ci dessus qui utilise "crypto/rand"
+		/* newSessionToken := uuid.NewString() */
+		sessionToken := pseudo_uuid()
 		maxAge := 300
 		// Définissez le jeton dans la carte de session, ainsi que l'utilisateur qu'il représente
 		assets.Sessions[sessionToken] = assets.Session{

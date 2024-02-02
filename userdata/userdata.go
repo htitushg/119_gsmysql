@@ -1,7 +1,7 @@
 package userdata
 
 import (
-	"118_go-session-auth-mysql_2/assets"
+	"119_gsmysql/assets"
 	"context"
 	"database/sql"
 	"log"

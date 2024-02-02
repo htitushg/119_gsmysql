@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+{{ template "base" . }}
+{{ define "content" }}
+    <div class="login-container">
+        <h2>Page home</h2>
+        <form action="/Logout" method="post">
+            <div>Bonjour {{.CSession.Pseudo}} vous êtes connecté !</div>
+            <div>La session exipirera dans : {{.CSession.MaxAge}} secondes !</div>
+            <button id="subbtn" type="submit" class="bouton2">Deconnexion</button>
+        </form>
+        <label for="story">Voici le token:</label>
+        <div class="CookieHolder">
+            <div class="Cookie">{{.SToken}}</div>
+        </div>
+    </div> 
+    <form action="/AfficheUserInfo" method="post" >
+        <button id="subbtn" type="submit" class="bouton3">Profil</button> 
+    </form>
+{{end}}

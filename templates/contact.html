@@ -1,0 +1,28 @@
+<!doctype html>
+{{ template "base" . }}
+
+{{ define "content" }}
+
+<div class="container">
+    <div class="part2">
+        <h1 class = "card-title text-center mb-3" >Programme en Golang</h1>
+        <form action="/Index" method="post">
+            <button id="subbtn" type="submit" class="bouton2">Retour à la page d'accueil</button>
+        </form>
+    </div>
+    <div class="part2">
+        <h2 class = "" >Formulaire de contact</h2>
+        <div> {{.CSession.Pseudo}} vous êtes connecté </div>
+        <div> La cession expirera dans {{.CSession.MaxAge}} secondes</div>
+        <div> Le jeton : {{.SToken}}</div>
+    </div>
+    <div class="col">
+    <p> Mise en oeuvre des sessions avec net/http, avec utilisation d'une base de données mysql</p>
+        <p>"Ce logiciel a été réalisé par HG de Barbarin"</p>
+        <p>"Vous pouvez le contacter à l'adresse suivante: htitushg@gmail.com"</p>
+        <p>"Ou bien par téléphone au numéro 08 59 97 24 38"</p>
+    </div>
+    
+</div>
+</div>    
+{{end}}

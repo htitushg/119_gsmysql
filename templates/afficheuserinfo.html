@@ -1,0 +1,13 @@
+<!DOCTYPE html>
+{{ template "base" . }}
+{{ define "content" }}
+    <div class="login-container">
+        <h2>Affichage de l'utilisateur {{.CSession.Pseudo}}</h2>  
+        <div>La session expirera dans: {{.CSession.MaxAge}} secondes ?</div> 
+        <div>SToken: {{.SToken}} </div> 
+        
+        <form action="/Index" method="post">
+            <button id="subbtn" type="submit" class="bouton2">Valider</button>
+        </form>
+    </div>
+{{end}}

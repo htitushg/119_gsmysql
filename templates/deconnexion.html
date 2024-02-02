@@ -1,0 +1,16 @@
+<!doctype html>
+{{ template "base" . }}
+
+{{ define "content" }}
+    <div class="login-container">
+        <h2>Page de deconnexion</h2>
+        <div>Bonjour {{.}} êtes vous sur de vouloir vous déconnecter ? !</div>   
+    
+        <form action="/DeconnexionPost" method="post">
+            <button id="subbtn" type="submit" class="bouton2">Valider</button>
+        </form>
+        <form action="/Index" method="post">
+            <button id="subbtn" type="submit" class="bouton2">Annuler</button>
+        </form>
+    </div>
+{{end}}

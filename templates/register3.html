@@ -1,0 +1,87 @@
+<!doctype html>
+{{ template "base" . }}
+
+{{ define "content" }}
+<h1>Formulaire d'enregistrement</h1>
+<div class="register-container">
+<form class= "s1" id="homeForm" name='registration' action="/RegisterPost" method="post" onSubmit='return formValidation();'>
+ <ul>
+    <div class="part3">{{.Message}}</div>
+    <div class="part1">
+        <li class="label1"><label name="pseudo">Pseudo:</label></li>
+        <li><input type="text" name="pseudo"   value="{{.Pseudo}}" autocomplete="off" size="15"/></li>
+    </div>
+    <div class="part1">
+        <li class="label1"><label name="email">Courriel:</label></li>
+        <li><input type="text" name="email"  value="{{.Email}}" size="30" autocomplete="off"/></li>
+    </div>
+    <div class="part1">
+        <li class="label1"><label name="passid">Password:</label></li>
+        <li><input type="password" id="passid" name="passid" value="{{.Password}}" autocomplete="off"  onMouseOver="document.all.astuce.innerText='8 à 20 caractères, au moins 1 chiffre, 1 majuscule, 1 minuscule, 1 caractère spécial !'" ; onmouseout="document.all.astuce.innerText=''";size="20"/>
+        <div class="rq" id="astuce"></div></li>
+        <li class="label1"><label name="passid2">Vérification Password:</label></li>
+        <li><input type="password" id="passid2" name="passid2" value="{{.Password2}}" autocomplete="off"  onMouseOver="document.all.astuce2.innerText='8 à 20 caractères, au moins 1 chiffre, 1 majuscule, 1 minuscule, 1 caractère spécial !'"; onmouseout="document.all.astuce2.innerText=''"; size="20"/>
+        <div class="rq" id="astuce2"></div></li>
+        <div class="part">
+            <li><img src="/static/css/oeil3.png" id="bouton" type="button" /></li>
+        </div>
+    </div>
+    <div class="part0">
+        <div class="part">
+            <li class="label1" ><label name="firstname">Nom:</label></li>
+            <li><input type="text" name="firstname"   value="{{.Firstname}}" autocomplete="off" size="15"/></li>
+        </div>
+        <div class="part">
+            <li class="label1"><label name="lastname">Prénom:</label></li>
+            <li><input type="text" name="lastname"   value="{{.Lastname}}" autocomplete="off" size="15"/></li>
+        </div>
+        <div class="part">
+            <li class="label1"><label name="address">Adresse:</label></li>
+            <li><input type="text" name="address" value="{{.Address}}" size="50" autocomplete="off"/></li>
+        </div>
+        <div class="part">
+            <li class="label1"><label name="town">Ville:</label></li>
+            <li><input type="text" name="town" value="{{.Town}}" size="50"  autocomplete="off"/></li>
+        </div>
+        <div class="part">
+            <li class="label1"><label name="zip">Code Postal:</label></li>
+            <li><input type="text" name="zip" value="{{.ZipCode}}" size="10" autocomplete="off"/></li>
+        </div></div>
+        <div class="part">
+            <li><label name="country">Pays:</label></li>
+            <li><select name="country" >
+                <option selected=selected>{{.Country}}</option>
+                <option value="France">France</option>
+                <option value="Australia">Australia</option>
+                <option value="Canada">Canada</option>
+                <option value="India">India</option>
+                <option value="Russia">Russia</option>
+                <option value="USA">USA</option>
+            </select></li>
+        </div>
+        <div class="part1">
+            <li><label for="Homme">Homme:</label></li>
+            <li><input id="Homme" type="radio" name="sex" value="Homme" checked="checked"/></li>
+            <li><label for="Femme">Femme:</label></li>
+            <li><input id="Femme" type="radio" name="sex" value="Femme" /></li>
+        </div>
+        <div class="part1">
+            <li><label>Language:</label></li>
+            <li><input type="checkbox" name="check" value="fr" checked onclick="onlycheck(this);"/><span>Français</span></li>
+            <li><input type="checkbox" name="check" value="en" onclick="onlycheck(this);"/><span>English</span></li>
+            <li><input type="checkbox" name="check" value="noen" onclick="onlycheck(this);"/><span>Autre</span></li>
+        </div>
+        <div class="part">
+            <li><label for="desc">Description:</label></li>
+            <li><textarea name="desc" id="desc" ></textarea></li>
+            <li><input class="bouton1" type="submit" name="submit" value="Submit" /></li>
+        </div>
+        
+    </div>
+ </ul>
+</form>
+<form action="/Index" method="post" onsubmit='return annulation();'>
+    <button id="subbtn" type="submit" class="bouton3">Annuler</button> 
+</form>
+</div>
+{{end}}

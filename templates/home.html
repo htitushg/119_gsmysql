@@ -1,0 +1,16 @@
+<!DOCTYPE html>
+{{ template "base" . }}
+
+{{ define "content" }}
+    <div class="login-container">
+        <h2>Page en libre service</h2>
+        <form action="/Login" method="post">
+            <div>Bonjour vous n'êtes pas connecté(e) !</div>
+            <button id="subbtn" type="submit" class="bouton2">Connexion</button>
+        </form>
+        <form action="/Register" method="post">
+          <div>Bonjour vous pouvez vous enregistrer !</div>
+          <button id="subbtn" type="submit" class="bouton2">Enregistrement</button>
+        </form>
+    </div>
+{{end}}

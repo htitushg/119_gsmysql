@@ -12,11 +12,11 @@ import (
 	"net/http"
 	"path/filepath"
 	"time"
-
-	"github.com/google/uuid"
+	//"github.com/google/uuid"
 )
 
 // Ajouté le 02/02/2024
+// Génération d'un UUID (Token)
 // Note - NOT RFC4122 compliant
 func pseudo_uuid() (uuid string) {
 
@@ -26,15 +26,14 @@ func pseudo_uuid() (uuid string) {
 		fmt.Println("Error: ", err)
 		return
 	}
-
 	uuid = fmt.Sprintf("%X-%X-%X-%X-%X", b[0:4], b[4:6], b[6:8], b[8:10], b[10:])
-
 	return
 }
 
 // Fin de l'Ajout du 02/02/2024
 
 // Ajouté le 27/01/2024 13h42
+// Fonction qui exécute un formulaire en utilisant le cache créé par CreateTemplateCache
 func renderTemplate(w http.ResponseWriter, tmplName string, td any) {
 	templateCache := assets.AppConfig.TemplateCache
 	tmpl, ok := templateCache[tmplName+".html"]
@@ -52,6 +51,9 @@ func renderTemplate(w http.ResponseWriter, tmplName string, td any) {
 		assets.CheckError(err)
 	}
 }
+
+// Fonction qui crée le cache qui contient les liens vers les formulaires
+// Cette fonction permet d'associer plusieurs formulaires(entête, corps et bas de page)
 func CreateTemplateCache() (map[string]*template.Template, error) {
 	cache := map[string]*template.Template{}
 	fmt.Printf("CreateTemplateCache Chemin = %v\n", assets.Chemin+"templates/*.html")
@@ -75,6 +77,9 @@ func CreateTemplateCache() (map[string]*template.Template, error) {
 }
 
 // Fin Ajout le 27/01/2024 13h42
+
+// Fonction qui renvoie si la session est valide : Token et true
+// Sinon Token et false
 func SessionValide(w http.ResponseWriter, r *http.Request) (stoken string, resultat bool) {
 	c, err := r.Cookie("session_token")
 	resultat = false
@@ -128,6 +133,8 @@ func SessionValide(w http.ResponseWriter, r *http.Request) (stoken string, resul
 }
 
 // Ajouté le 28/01/2024
+// Controlleur Apropos: renvoie si la session est valide vers contact
+// Sinon renvoie vers home
 func Apropos(w http.ResponseWriter, r *http.Request) {
 	var data assets.Data
 	sToken, exists := SessionValide(w, r)
@@ -147,6 +154,8 @@ func Apropos(w http.ResponseWriter, r *http.Request) {
 }
 
 // Fin Ajout le 28/01/2024
+
+// Controlleur Home: renvoie vers la pge publique
 func Home(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("Home log: UrlPath: %#v\n", r.URL.Path) // testing
 	var data assets.Data
@@ -167,6 +176,9 @@ func Home(w http.ResponseWriter, r *http.Request) {
 		renderTemplate(w, "index", data)
 	}
 }
+
+// Controlleur Login: Si la session est valide, renvoie vers la page privée
+// Sinon renvoie vers la page de connexion
 func Login(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("Login log: UrlPath: %#v\n", r.URL.Path)
 	var data assets.Data
@@ -185,6 +197,10 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		renderTemplate(w, "index", data)
 	}
 }
+
+// Controlleur Signin: Traite les informations entrées dans login
+// Si les informations sont correcte: crée la session et renvoie vers index
+// Sinon renvoie vers la page publique (home)
 func Signin(w http.ResponseWriter, r *http.Request) {
 	var creds assets.CredentialsR
 	var data assets.Data
@@ -221,7 +237,7 @@ func Signin(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func Refresh(w http.ResponseWriter, r *http.Request) {
+/* func Refresh(w http.ResponseWriter, r *http.Request) {
 	// (BEGIN) The code from this point is the same as the first part of the `Welcome` route
 	var data assets.Data
 	sessionToken, exists := SessionValide(w, r)
@@ -255,8 +271,10 @@ func Refresh(w http.ResponseWriter, r *http.Request) {
 		data.SToken = newSessionToken
 		renderTemplate(w, "index", data)
 	}
-}
+} */
 
+// Controlleur Logout: Si la session est valide: ferme la session
+// Renvoie vers la page publique (home)
 func Logout(w http.ResponseWriter, r *http.Request) {
 	sessionToken, exists := SessionValide(w, r)
 	if exists {
@@ -273,6 +291,9 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 	}
 	renderTemplate(w, "home", nil)
 }
+
+// Controlleur AfficheUserInfo: Si la session est valide renvoie vers afficheuserinfo
+// Sinon renvoie vers la page publique (home)
 func AfficheUserInfo(w http.ResponseWriter, r *http.Request) {
 	fmt.Printf("AfficheUserInfo log: UrlPath: %#v\n", r.URL.Path) // testing
 	var data assets.Data
@@ -293,6 +314,8 @@ func AfficheUserInfo(w http.ResponseWriter, r *http.Request) {
 
 // Ajouté le 26/01/2024
 // for GET
+// Controlleur Register: Si la session est valide renvoie vers la page privée
+// Sinon renvoie vers la page d'enregistrement (register3)
 func Register(w http.ResponseWriter, r *http.Request) {
 	var data assets.Data
 	fmt.Printf("Register log: UrlPath: %#v\n", r.URL.Path) // testing
@@ -314,6 +337,10 @@ func Register(w http.ResponseWriter, r *http.Request) {
 }
 
 // for POST
+// Controlleur RegisterPost: Traite les information entrées dans register3
+// Vérifie la validité des informations
+// Si correct enregistre le nouvel utilisateur dans la base de données
+// Si incorrect(utlisateur ou courriel déjà existant) retourne vers register3
 func RegisterPost(w http.ResponseWriter, r *http.Request) {
 	log.Printf("RegisterPost log: UrlPath: %#v\n", r.URL.Path) // testing
 	fmt.Println("RegisterPost")
